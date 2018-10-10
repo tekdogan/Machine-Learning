@@ -1,0 +1,36 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import r2_score
+
+# fetch dataset into pandas dataframe
+df = pd.read_csv('cart_dataset.csv')
+
+# change features into right format
+x = df.iloc[:,0].values.reshape(-1,1)
+y = df.iloc[:,1].values.reshape(-1,1)
+
+# initialize regressor with 100 estimators and random seed = 10
+random_forest = RandomForestRegressor(n_estimators = 100, random_state = 10)
+
+# train algorithm
+random_forest.fit(x,y)
+
+# recreate the feature1 with frequency of 0.01
+x_ = np.arange(min(x), max(x), 0.01).reshape(-1,1)
+
+# and predict all the values
+y_ = random_forest.predict(x_)
+
+# check r square score
+y_head = random_forest.predict(x)
+print(r2_score(y,y_head))
+
+# visualize results
+plt.scatter(x, y, color = 'green')
+plt.plot(x_, y_, color = 'red')
+plt.show()
+
+
+
